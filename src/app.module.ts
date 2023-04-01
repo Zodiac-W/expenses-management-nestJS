@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import database from './config/database.config';
 import { TypeOrmConfigService } from './db/typeorm-config.service';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { TypeOrmConfigService } from './db/typeorm-config.service';
         return dataSource;
       },
     }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
