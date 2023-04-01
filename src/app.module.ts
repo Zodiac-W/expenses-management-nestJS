@@ -9,6 +9,7 @@ import jwtConfig from './config/jwt.config';
 import { TypeOrmConfigService } from './db/typeorm-config.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     UsersModule,
     AuthModule,
+    RoleModule,
   ],
   controllers: [AppController],
   providers: [AppService],

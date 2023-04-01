@@ -1,3 +1,4 @@
+import { Role } from 'src/role/entities/role.entity';
 import { User } from 'src/users/entities/user.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
@@ -9,7 +10,7 @@ export const AppDataSource = new DataSource({
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
   synchronize: process.env.DATABASE_SYNCHRONIZE === 'true',
-  entities: [User],
+  entities: [User, Role],
   migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
   cli: {
     entitiesDir: 'src',
