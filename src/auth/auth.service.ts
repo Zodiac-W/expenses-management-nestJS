@@ -28,4 +28,13 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
     };
   }
+
+  async validateUsers(payload: any): Promise<any> {
+    const user = await this.userService.getUser(payload.sub);
+
+    if (user) {
+      return user;
+    }
+    return null;
+  }
 }

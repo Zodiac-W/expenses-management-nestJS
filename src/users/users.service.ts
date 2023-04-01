@@ -51,4 +51,11 @@ export class UsersService {
     const { user_pass, ...userPassed } = user;
     return userPassed;
   }
+
+  async getUser(id: number) {
+    const user = await this.userRepository.findOne({ where: { id } });
+
+    const userId = user.id;
+    return userId;
+  }
 }
