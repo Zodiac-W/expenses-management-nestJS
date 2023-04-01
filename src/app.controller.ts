@@ -10,6 +10,7 @@ export class AppController {
   @UseGuards(JwtAuthGuard)
   @Get()
   getUser(@User() user: any) {
-    return user;
+    console.log(user);
+    return user.userId;
   }
 }

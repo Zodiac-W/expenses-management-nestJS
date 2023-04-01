@@ -1,6 +1,9 @@
 import { Role } from 'src/role/entities/role.entity';
+import { SpaceUser } from 'src/space/entities/spaceUser.entity';
+import { Space } from 'src/space/entities/Space.entity';
 import { User } from 'src/users/entities/user.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
+import { SpaceUserRole } from 'src/space/entities/spaceUserRole.entity';
 
 export const AppDataSource = new DataSource({
   type: process.env.DATABASE_TYPE,
@@ -10,7 +13,7 @@ export const AppDataSource = new DataSource({
   password: process.env.DATABASE_PASSWORD,
   database: process.env.DATABASE_NAME,
   synchronize: process.env.DATABASE_SYNCHRONIZE === 'true',
-  entities: [User, Role],
+  entities: [User, Role, Space, SpaceUser, SpaceUserRole],
   migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
   cli: {
     entitiesDir: 'src',

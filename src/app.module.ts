@@ -10,6 +10,7 @@ import { TypeOrmConfigService } from './db/typeorm-config.service';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { RoleModule } from './role/role.module';
+import { SpaceModule } from './space/space.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { RoleModule } from './role/role.module';
     UsersModule,
     AuthModule,
     RoleModule,
+    SpaceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

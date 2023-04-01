@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { Role } from 'src/role/entities/role.entity';
+import { SpaceUser } from 'src/space/entities/spaceUser.entity';
+import { Space } from 'src/space/entities/Space.entity';
 import { User } from 'src/users/entities/user.entity';
+import { SpaceUserRole } from 'src/space/entities/spaceUserRole.entity';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -17,7 +20,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       password: this.configService.get('database.password'),
       database: this.configService.get('database.database'),
       synchronize: this.configService.get('database.synchronize'),
-      entities: [User, Role],
+      entities: [User, Role, Space, SpaceUser, SpaceUserRole],
       migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
       cli: {
         entitiesDir: 'src',
