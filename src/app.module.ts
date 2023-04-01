@@ -5,14 +5,16 @@ import { DataSource } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import database from './config/database.config';
+import jwtConfig from './config/jwt.config';
 import { TypeOrmConfigService } from './db/typeorm-config.service';
 import { UsersModule } from './users/users.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [database],
+      load: [database, jwtConfig],
       envFilePath: ['./.env'],
     }),
     TypeOrmModule.forRootAsync({
@@ -23,6 +25,7 @@ import { UsersModule } from './users/users.module';
       },
     }),
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
