@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   ParseIntPipe,
   Post,
@@ -27,5 +28,11 @@ export class PermissionsController {
     @Body('name') name: string,
   ) {
     return this.PermissionsService.addPermissionToRole(id, name);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('all')
+  getAllPermissions() {
+    return this.PermissionsService.getAllPermission();
   }
 }

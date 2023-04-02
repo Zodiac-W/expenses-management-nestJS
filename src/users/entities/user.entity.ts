@@ -19,5 +19,5 @@ export class User {
   user_pass: string;
 
   @OneToMany((type) => SpaceUser, (spaceUser) => spaceUser.user)
-  spaceUser: SpaceUser;
+  spaceUser: SpaceUser[];
 }

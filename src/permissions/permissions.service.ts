@@ -28,20 +28,6 @@ export class PermissionsService {
     return permission;
   }
 
-  async getOnePermission(id: number): Promise<Permissions> {
-    const permission = await this.permissionRepository.findOne({
-      where: { id },
-    });
-    return permission;
-  }
-
-  async getPermissionsName(ids: number[]): Promise<string[]> {
-    const permissions = await this.permissionRepository.find({
-      where: { id: In(ids) },
-    });
-    return permissions.map((permission) => permission.permission_name);
-  }
-
   async addPermissionToRole(id: number, name: string): Promise<any> {
     const permission = await this.permissionRepository.findOne({
       where: { id },
@@ -56,5 +42,27 @@ export class PermissionsService {
     await this.permissionsRoleRepository.save(permissionRole);
 
     return permissionRole;
+  }
+
+  async getOnePermission(id: number): Promise<Permissions> {
+    const permission = await this.permissionRepository.findOne({
+      where: { id },
+    });
+    return permission;
+  }
+
+  async getPermissionsName(ids: number[]): Promise<string[]> {
+    const permissions = await this.permissionRepository.find({
+      where: { id: In(ids) },
+    });
+    return permissions.map((permission) => permission.permission_name);
+  }
+
+  async getAllPermission(): Promise<any> {
+    const permissions = await this.permissionRepository.find({
+      select: ['permission_name'],
+    });
+
+    return permissions;
   }
 }

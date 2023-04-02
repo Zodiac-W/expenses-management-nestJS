@@ -15,5 +15,5 @@ export class SpaceUser {
   space: Space;
 
   @OneToOne((type) => SpaceUserRole, (spaceUserRole) => spaceUserRole.spaceUser)
-  spaceUserRole: SpaceUserRole;
+  spaceUserRole: SpaceUserRole[];
 }
