@@ -15,14 +15,20 @@ import { RoleService } from './role.service';
 export class RoleController {
   constructor(private roleService: RoleService) {}
 
-  @Post('create')
-  createRole(@Body() createRoleDto: CreateRoleDto) {
-    return this.roleService.createRole(createRoleDto);
+  @UseGuards(JwtAuthGuard)
+  @Get('all')
+  getAllRoles() {
+    return this.roleService.getAllRoles();
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   getRolePermissions(@Param('id', ParseIntPipe) id: number) {
     return this.roleService.getRolePermissions(id);
+  }
+
+  @Post('create')
+  createRole(@Body() createRoleDto: CreateRoleDto) {
+    return this.roleService.createRole(createRoleDto);
   }
 }

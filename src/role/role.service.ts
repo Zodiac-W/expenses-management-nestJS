@@ -41,4 +41,10 @@ export class RoleService {
 
     return permissions;
   }
+
+  async getAllRoles(): Promise<any> {
+    const roles = await this.roleRepository.find({ select: ['role_name'] });
+
+    return roles;
+  }
 }

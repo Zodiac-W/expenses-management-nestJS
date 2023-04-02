@@ -1,5 +1,12 @@
 import { SpaceUser } from 'src/space/entities/spaceUser.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -17,6 +24,12 @@ export class User {
 
   @Column()
   user_pass: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 
   @OneToMany((type) => SpaceUser, (spaceUser) => spaceUser.user)
   spaceUser: SpaceUser[];

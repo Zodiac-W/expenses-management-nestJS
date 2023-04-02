@@ -56,4 +56,18 @@ export class SpaceService {
     const space = await this.spaceRepository.findOne({ where: { id } });
     return space;
   }
+
+  async getAllSpaces(): Promise<any> {
+    const spaces = await this.spaceRepository.find({ select: ['space_name'] });
+
+    return spaces;
+  }
+
+  async deleteSpace(id: number): Promise<any> {
+    const space = this.getOneSpace(id);
+
+    await this.spaceRepository.softDelete(id);
+
+    return space;
+  }
 }
