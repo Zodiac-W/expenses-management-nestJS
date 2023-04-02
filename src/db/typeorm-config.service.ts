@@ -6,6 +6,8 @@ import { SpaceUser } from 'src/space/entities/spaceUser.entity';
 import { Space } from 'src/space/entities/Space.entity';
 import { User } from 'src/users/entities/user.entity';
 import { SpaceUserRole } from 'src/space/entities/spaceUserRole.entity';
+import { Permissions } from 'src/permissions/entities/Permission.entity';
+import { PermissionsRole } from 'src/permissions/entities/permissionsRole.entity';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -20,7 +22,15 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       password: this.configService.get('database.password'),
       database: this.configService.get('database.database'),
       synchronize: this.configService.get('database.synchronize'),
-      entities: [User, Role, Space, SpaceUser, SpaceUserRole],
+      entities: [
+        User,
+        Role,
+        Space,
+        SpaceUser,
+        SpaceUserRole,
+        Permissions,
+        PermissionsRole,
+      ],
       migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
       cli: {
         entitiesDir: 'src',

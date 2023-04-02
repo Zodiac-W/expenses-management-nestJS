@@ -29,4 +29,16 @@ export class RoleService {
 
     return role;
   }
+
+  async getRolePermissions(id: number): Promise<any> {
+    const role = await this.roleRepository.findOne({
+      where: { id },
+      relations: ['permissionsRole', 'permissionsRole.permissions'],
+    });
+    const permissions = role.permissionsRole.map(
+      (permissionRole) => permissionRole.permissions,
+    );
+
+    return permissions;
+  }
 }
