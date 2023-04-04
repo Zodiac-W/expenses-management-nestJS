@@ -1,10 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateIncomeDto } from 'src/income/dto/create-income-dto';
+import { IncomeService } from 'src/income/income.service';
 import { RoleService } from 'src/role/role.service';
 import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateSpaceDto } from './dto/create-space-dto';
 import { Space } from './entities/Space.entity';
+import { SpaceIncome } from './entities/spaceIncome';
 import { SpaceUser } from './entities/spaceUser.entity';
 import { SpaceUserRole } from './entities/spaceUserRole.entity';
 
@@ -17,8 +20,11 @@ export class SpaceService {
     private spaceUsesrRepository: Repository<SpaceUser>,
     @InjectRepository(SpaceUserRole)
     private spaceUserRoleRepository: Repository<SpaceUserRole>,
+    @InjectRepository(SpaceIncome)
+    private spaceIncomeRepository: Repository<SpaceIncome>,
     private userService: UsersService,
     private roleService: RoleService,
+    private incomeService: IncomeService,
   ) {}
 
   async creaeteSpace(
@@ -117,5 +123,40 @@ export class SpaceService {
     const users = space.spaceUser.map((spaceUser) => spaceUser.user);
 
     return users;
+  }
+
+  async addNewIncome(
+    spaceId: number,
+    creaeteIncomeDto: CreateIncomeDto,
+  ): Promise<any> {
+    const income = await this.incomeService.createIncome(creaeteIncomeDto);
+    const space = await this.getOneSpace(spaceId);
+
+    const spaceIncome = new SpaceIncome();
+    spaceIncome.income = income;
+    spaceIncome.space = space;
+
+    await this.spaceIncomeRepository.save(spaceIncome);
+
+    return spaceIncome;
+  }
+
+  async getAllIncomes(id: number): Promise<any> {
+    const space = await this.spaceRepository.findOne({
+      where: { id },
+      relations: ['spaceIncome', 'spaceIncome.income'],
+    });
+    const incomes = space.spaceIncome.map((spaceIncome) => spaceIncome.income);
+    return incomes;
+  }
+
+  async getTotalIncome(id: number): Promise<any> {
+    const incomes = await this.getAllIncomes(id);
+
+    const amount = incomes.map((income) => income.income_amount);
+
+    const total = amount.reduce((acc, current) => acc + current);
+
+    return total;
   }
 }

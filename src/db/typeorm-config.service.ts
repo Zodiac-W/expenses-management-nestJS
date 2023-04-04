@@ -8,6 +8,8 @@ import { User } from 'src/users/entities/user.entity';
 import { SpaceUserRole } from 'src/space/entities/spaceUserRole.entity';
 import { Permissions } from 'src/permissions/entities/Permission.entity';
 import { PermissionsRole } from 'src/permissions/entities/permissionsRole.entity';
+import { Income } from 'src/income/entities/income.entity';
+import { SpaceIncome } from 'src/space/entities/spaceIncome';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -30,6 +32,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
         SpaceUserRole,
         Permissions,
         PermissionsRole,
+        Income,
+        SpaceIncome,
       ],
       migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
       cli: {

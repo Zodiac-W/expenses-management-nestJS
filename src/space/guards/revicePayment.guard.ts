@@ -3,7 +3,7 @@ import { RoleService } from 'src/role/role.service';
 import { SpaceService } from '../space.service';
 
 @Injectable()
-export class AddUser implements CanActivate {
+export class RecivePayment implements CanActivate {
   constructor(
     private spaceService: SpaceService,
     private roleService: RoleService,
@@ -16,8 +16,8 @@ export class AddUser implements CanActivate {
 
     const role = await this.spaceService.getUserRole(userId, spaceId);
 
-    const canAdduser = await this.roleService.canAddUser(role.id);
+    const canRecivePayment = await this.roleService.canRecivePayment(role.id);
 
-    return canAdduser;
+    return canRecivePayment;
   }
 }

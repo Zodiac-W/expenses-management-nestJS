@@ -6,6 +6,8 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { SpaceUserRole } from 'src/space/entities/spaceUserRole.entity';
 import { Permissions } from 'src/permissions/entities/Permission.entity';
 import { PermissionsRole } from 'src/permissions/entities/permissionsRole.entity';
+import { Income } from 'src/income/entities/income.entity';
+import { SpaceIncome } from 'src/space/entities/spaceIncome';
 
 export const AppDataSource = new DataSource({
   type: process.env.DATABASE_TYPE,
@@ -23,6 +25,8 @@ export const AppDataSource = new DataSource({
     SpaceUserRole,
     Permissions,
     PermissionsRole,
+    Income,
+    SpaceIncome,
   ],
   migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
   cli: {

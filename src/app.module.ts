@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { RoleModule } from './role/role.module';
 import { SpaceModule } from './space/space.module';
 import { PermissionsModule } from './permissions/permissions.module';
+import { IncomeModule } from './income/income.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { PermissionsModule } from './permissions/permissions.module';
     RoleModule,
     SpaceModule,
     PermissionsModule,
+    IncomeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

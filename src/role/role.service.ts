@@ -61,4 +61,18 @@ export class RoleService {
       return false;
     }
   }
+
+  async canRecivePayment(id: number): Promise<any> {
+    const permissions = await this.getRolePermissions(id);
+
+    const canRecivePayment = permissions.some(
+      (permission) => permission.permission_name === 'recive_payment',
+    );
+
+    if (canRecivePayment) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
