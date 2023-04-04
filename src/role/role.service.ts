@@ -48,6 +48,20 @@ export class RoleService {
     return roles;
   }
 
+  async canWatchData(id: number): Promise<any> {
+    const permissions = await this.getRolePermissions(id);
+
+    const canWatch = permissions.some(
+      (permission) => permission.permission_name === 'watch_data',
+    );
+
+    if (canWatch) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   async canAddUser(id: number): Promise<any> {
     const permissions = await this.getRolePermissions(id);
 

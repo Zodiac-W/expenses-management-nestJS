@@ -14,6 +14,7 @@ import { CreateIncomeDto } from 'src/income/dto/create-income-dto';
 import { CreateSpaceDto } from './dto/create-space-dto';
 import { AddUser } from './guards/addUser.guard';
 import { RecivePayment } from './guards/revicePayment.guard';
+import { WatchData } from './guards/watchData.guard';
 
 import { SpaceService } from './space.service';
 
@@ -39,7 +40,7 @@ export class SpaceController {
     return this.spaceService.deleteSpace(id);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, WatchData)
   @Get(':id/user/role')
   getUserRole(@Param('id', ParseIntPipe) id: number, @User() user: any) {
     return this.spaceService.getUserRole(user.userId, id);
@@ -55,7 +56,7 @@ export class SpaceController {
     return this.spaceService.addNewUser(newId, id, role);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, WatchData)
   @Get(':id/all/users')
   getAllUsers(@Param('id', ParseIntPipe) id: number) {
     return this.spaceService.getAllUsers(id);
@@ -70,13 +71,13 @@ export class SpaceController {
     return this.spaceService.addNewIncome(id, createIncomeDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, WatchData)
   @Get(':id/all/income')
   getAllIncome(@Param('id', ParseIntPipe) id: number) {
     return this.spaceService.getAllIncomes(id);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, WatchData)
   @Get(':id/total/income')
   getTotalIncome(@Param('id', ParseIntPipe) id: number) {
     return this.spaceService.getTotalIncome(id);
