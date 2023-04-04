@@ -70,4 +70,12 @@ export class UsersService {
 
     return users;
   }
+
+  async deleteUser(id: number): Promise<any> {
+    const user = this.getOneUser(id);
+
+    await this.userRepository.softDelete(id);
+
+    return user;
+  }
 }

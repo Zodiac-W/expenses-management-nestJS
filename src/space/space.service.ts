@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RoleService } from 'src/role/role.service';
 import { UsersService } from 'src/users/users.service';
@@ -16,7 +16,7 @@ export class SpaceService {
     @InjectRepository(SpaceUser)
     private spaceUsesrRepository: Repository<SpaceUser>,
     @InjectRepository(SpaceUserRole)
-    private spaceUserRole: Repository<SpaceUserRole>,
+    private spaceUserRoleRepository: Repository<SpaceUserRole>,
     private userService: UsersService,
     private roleService: RoleService,
   ) {}
@@ -47,7 +47,7 @@ export class SpaceService {
     spaceUserRole.spaceUser = spaceUser;
     spaceUserRole.role = role;
 
-    await this.spaceUserRole.save(spaceUserRole);
+    await this.spaceUserRoleRepository.save(spaceUserRole);
 
     return spaceUserRole;
   }
@@ -69,5 +69,53 @@ export class SpaceService {
     await this.spaceRepository.softDelete(id);
 
     return space;
+  }
+
+  async getUserRole(userId: number, spaceId: number): Promise<any> {
+    const spaceUserRole = await this.spaceUserRoleRepository.findOne({
+      where: { spaceUser: { user: { id: userId }, space: { id: spaceId } } },
+      relations: ['role'],
+    });
+
+    if (!spaceUserRole) {
+      throw new NotFoundException(
+        `User with id ${userId} does not have a role for space with id ${spaceId}`,
+      );
+    }
+
+    return spaceUserRole.role;
+  }
+
+  async addNewUser(userId: number, spaceId: number, roleName: string) {
+    const user = await this.userService.getOneUser(userId);
+
+    const space = await this.getOneSpace(spaceId);
+
+    const spaceUser = new SpaceUser();
+    spaceUser.user = user;
+    spaceUser.space = space;
+
+    await this.spaceUsesrRepository.save(spaceUser);
+
+    const role = await this.roleService.getRoleByName(roleName);
+
+    const spaceUserRole = new SpaceUserRole();
+
+    spaceUserRole.spaceUser = spaceUser;
+    spaceUserRole.role = role;
+
+    await this.spaceUserRoleRepository.save(spaceUserRole);
+
+    return spaceUserRole;
+  }
+
+  async getAllUsers(id: number): Promise<any> {
+    const space = await this.spaceRepository.findOne({
+      where: { id },
+      relations: ['spaceUser', 'spaceUser.user'],
+    });
+    const users = space.spaceUser.map((spaceUser) => spaceUser.user);
+
+    return users;
   }
 }

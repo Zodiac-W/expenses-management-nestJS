@@ -47,4 +47,18 @@ export class RoleService {
 
     return roles;
   }
+
+  async canAddUser(id: number): Promise<any> {
+    const permissions = await this.getRolePermissions(id);
+
+    const canAddUser = permissions.some(
+      (permission) => permission.permission_name === 'add_user',
+    );
+
+    if (canAddUser) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

@@ -1,4 +1,11 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 import { UsersService } from './users.service';
 
@@ -10,5 +17,11 @@ export class UsersController {
   @Get('all')
   getAllUsers() {
     return this.usersService.getAllUsers();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  deleteUser(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.deleteUser(id);
   }
 }
