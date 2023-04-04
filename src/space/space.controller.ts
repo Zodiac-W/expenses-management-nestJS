@@ -10,9 +10,11 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 import { User } from 'src/decorators/user.decorator';
+import { CreateExpensesDto } from 'src/expenses/dto/create-expenses-dto';
 import { CreateIncomeDto } from 'src/income/dto/create-income-dto';
 import { CreateSpaceDto } from './dto/create-space-dto';
 import { AddUser } from './guards/addUser.guard';
+import { MakePayment } from './guards/makePayment.guard';
 import { RecivePayment } from './guards/revicePayment.guard';
 import { WatchData } from './guards/watchData.guard';
 
@@ -81,5 +83,26 @@ export class SpaceController {
   @Get(':id/total/income')
   getTotalIncome(@Param('id', ParseIntPipe) id: number) {
     return this.spaceService.getTotalIncome(id);
+  }
+
+  @UseGuards(JwtAuthGuard, MakePayment)
+  @Post(':id/add/expenses')
+  addNewExpenses(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() createExpensesDto: CreateExpensesDto,
+  ) {
+    return this.spaceService.addNewExpenses(id, createExpensesDto);
+  }
+
+  @UseGuards(JwtAuthGuard, WatchData)
+  @Get(':id/all/expenses')
+  getAllExpenses(@Param('id', ParseIntPipe) id: number) {
+    return this.spaceService.getAllExpenses(id);
+  }
+
+  @UseGuards(JwtAuthGuard, WatchData)
+  @Get(':id/total/expenses')
+  getTotalExpenses(@Param('id', ParseIntPipe) id: number) {
+    return this.spaceService.getTotalExpenses(id);
   }
 }

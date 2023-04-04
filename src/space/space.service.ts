@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateExpensesDto } from 'src/expenses/dto/create-expenses-dto';
+import { ExpensesService } from 'src/expenses/expenses.service';
 import { CreateIncomeDto } from 'src/income/dto/create-income-dto';
 import { IncomeService } from 'src/income/income.service';
 import { RoleService } from 'src/role/role.service';
@@ -7,6 +9,7 @@ import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateSpaceDto } from './dto/create-space-dto';
 import { Space } from './entities/Space.entity';
+import { SpaceExpenses } from './entities/spaceExpenses.entity';
 import { SpaceIncome } from './entities/spaceIncome';
 import { SpaceUser } from './entities/spaceUser.entity';
 import { SpaceUserRole } from './entities/spaceUserRole.entity';
@@ -22,9 +25,12 @@ export class SpaceService {
     private spaceUserRoleRepository: Repository<SpaceUserRole>,
     @InjectRepository(SpaceIncome)
     private spaceIncomeRepository: Repository<SpaceIncome>,
+    @InjectRepository(SpaceExpenses)
+    private spaceExpensesRepository: Repository<SpaceExpenses>,
     private userService: UsersService,
     private roleService: RoleService,
     private incomeService: IncomeService,
+    private expensesService: ExpensesService,
   ) {}
 
   async creaeteSpace(
@@ -154,6 +160,45 @@ export class SpaceService {
     const incomes = await this.getAllIncomes(id);
 
     const amount = incomes.map((income) => income.income_amount);
+
+    const total = amount.reduce((acc, current) => acc + current);
+
+    return total;
+  }
+
+  async addNewExpenses(
+    spaceId: number,
+    createExpensesDto: CreateExpensesDto,
+  ): Promise<any> {
+    const expenses = await this.expensesService.createExpenses(
+      createExpensesDto,
+    );
+    const space = await this.getOneSpace(spaceId);
+
+    const spaceExpenses = new SpaceExpenses();
+    spaceExpenses.expenses = expenses;
+    spaceExpenses.space = space;
+
+    await this.spaceExpensesRepository.save(spaceExpenses);
+    return spaceExpenses;
+  }
+
+  async getAllExpenses(id: number): Promise<any> {
+    const space = await this.spaceRepository.findOne({
+      where: { id },
+      relations: ['spaceExpenses', 'spaceExpenses.expenses'],
+    });
+    const expenses = space.spaceExpenses.map(
+      (spaceExpenses) => spaceExpenses.expenses,
+    );
+
+    return expenses;
+  }
+
+  async getTotalExpenses(id: number): Promise<any> {
+    const expenses = await this.getAllExpenses(id);
+
+    const amount = expenses.map((expenses) => expenses.expenses_amount);
 
     const total = amount.reduce((acc, current) => acc + current);
 

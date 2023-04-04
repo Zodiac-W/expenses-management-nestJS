@@ -10,6 +10,8 @@ import { Permissions } from 'src/permissions/entities/Permission.entity';
 import { PermissionsRole } from 'src/permissions/entities/permissionsRole.entity';
 import { Income } from 'src/income/entities/income.entity';
 import { SpaceIncome } from 'src/space/entities/spaceIncome';
+import { Expenses } from 'src/expenses/entities/expenses.entity';
+import { SpaceExpenses } from 'src/space/entities/spaceExpenses.entity';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -34,6 +36,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
         PermissionsRole,
         Income,
         SpaceIncome,
+        Expenses,
+        SpaceExpenses,
       ],
       migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
       cli: {
