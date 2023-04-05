@@ -1,4 +1,4 @@
-import { SpaceDebt } from 'src/space/entities/spaceDebt';
+import { SpaceCredit } from 'src/space/entities/spaceCredit';
 import {
   Column,
   CreateDateColumn,
@@ -9,18 +9,18 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Debt {
+export class Credit {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  debt_amount: number;
+  credit_amount: number;
 
   @Column()
-  debt_from_phone: string;
+  credit_to_phone: string;
 
   @Column()
-  debt_description: string;
+  credit_description: string;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -28,6 +28,6 @@ export class Debt {
   @DeleteDateColumn()
   deletedAt: Date;
 
-  @OneToMany((type) => SpaceDebt, (spaceDebt) => spaceDebt.debt)
-  spaceDebt: SpaceDebt[];
+  @OneToMany((type) => SpaceCredit, (spaceCredit) => spaceCredit.credit)
+  spaceCredit: SpaceCredit;
 }

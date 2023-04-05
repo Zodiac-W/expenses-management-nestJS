@@ -7,6 +7,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { SpaceCredit } from './spaceCredit';
 import { SpaceDebt } from './spaceDebt';
 import { SpaceExpenses } from './spaceExpenses.entity';
 import { SpaceIncome } from './spaceIncome';
@@ -36,4 +37,7 @@ export class Space {
 
   @OneToMany((type) => SpaceDebt, (spaceDebt) => spaceDebt.space)
   spaceDebt: SpaceDebt[];
+
+  @OneToMany((type) => SpaceCredit, (spaceCredit) => spaceCredit.space)
+  spaceCredit: SpaceCredit[];
 }

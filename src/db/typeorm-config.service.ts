@@ -14,6 +14,8 @@ import { Expenses } from 'src/expenses/entities/expenses.entity';
 import { SpaceExpenses } from 'src/space/entities/spaceExpenses.entity';
 import { Debt } from 'src/debt/entities/debt.entity';
 import { SpaceDebt } from 'src/space/entities/spaceDebt';
+import { Credit } from 'src/credit/entities/credit.entity';
+import { SpaceCredit } from 'src/space/entities/spaceCredit';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -42,6 +44,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
         SpaceExpenses,
         Debt,
         SpaceDebt,
+        Credit,
+        SpaceCredit,
       ],
       migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
       cli: {

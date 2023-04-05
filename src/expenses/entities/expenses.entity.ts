@@ -25,5 +25,5 @@ export class Expenses {
   deletedAt: Date;
 
   @OneToMany((type) => SpaceExpenses, (spaceExpenses) => spaceExpenses.expenses)
-  spaceExpenses: SpaceExpenses;
+  spaceExpenses: SpaceExpenses[];
 }

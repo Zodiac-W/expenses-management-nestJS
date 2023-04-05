@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreditService } from 'src/credit/credit.service';
+import { CreateCreditDto } from 'src/credit/dto/create-credit-dto';
 import { DebtService } from 'src/debt/debt.service';
 import { CreateDebtDto } from 'src/debt/dto/create-debt-dto';
 import { CreateExpensesDto } from 'src/expenses/dto/create-expenses-dto';
@@ -11,6 +13,7 @@ import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateSpaceDto } from './dto/create-space-dto';
 import { Space } from './entities/Space.entity';
+import { SpaceCredit } from './entities/spaceCredit';
 import { SpaceDebt } from './entities/spaceDebt';
 import { SpaceExpenses } from './entities/spaceExpenses.entity';
 import { SpaceIncome } from './entities/spaceIncome';
@@ -32,11 +35,14 @@ export class SpaceService {
     private spaceExpensesRepository: Repository<SpaceExpenses>,
     @InjectRepository(SpaceDebt)
     private spaceDebtRepository: Repository<SpaceDebt>,
+    @InjectRepository(SpaceCredit)
+    private spaceCreditRepository: Repository<SpaceCredit>,
     private userService: UsersService,
     private roleService: RoleService,
     private incomeService: IncomeService,
     private expensesService: ExpensesService,
     private debtService: DebtService,
+    private creditService: CreditService,
   ) {}
 
   async creaeteSpace(
@@ -240,6 +246,42 @@ export class SpaceService {
     const debts = await this.getAllDebts(id);
 
     const amount = debts.map((debt) => debt.debt_amount);
+
+    const total = amount.reduce((acc, current) => acc + current);
+
+    return total;
+  }
+
+  async addNewCredit(
+    spaceId: number,
+    createCreditDto: CreateCreditDto,
+  ): Promise<any> {
+    const credit = await this.creditService.createCredit(createCreditDto);
+    const space = await this.getOneSpace(spaceId);
+
+    const spaceCredit = new SpaceCredit();
+    spaceCredit.space = space;
+    spaceCredit.credit = credit;
+
+    await this.spaceCreditRepository.save(spaceCredit);
+
+    return spaceCredit;
+  }
+
+  async getAllCredit(id: number): Promise<any> {
+    const space = await this.spaceRepository.findOne({
+      where: { id },
+      relations: ['spaceCredit', 'spaceCredit.credit'],
+    });
+
+    const credits = space.spaceCredit.map((spaceCredit) => spaceCredit.credit);
+    return credits;
+  }
+
+  async getTotalCredit(id: number): Promise<any> {
+    const credits = await this.getAllCredit(id);
+
+    const amount = credits.map((credit) => credit.credit_amount);
 
     const total = amount.reduce((acc, current) => acc + current);
 

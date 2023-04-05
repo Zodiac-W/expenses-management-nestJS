@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import e from 'express';
 import { Repository } from 'typeorm';
 import { CreateRoleDto } from './dto/create-role-dto';
 import { Role } from './entities/role.entity';
@@ -112,6 +113,20 @@ export class RoleService {
     );
 
     if (canTakeDebt) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  async canGiveCredit(id: number): Promise<any> {
+    const permissions = await this.getRolePermissions(id);
+
+    const canGiveCredit = permissions.some(
+      (permission) => permission.permission_name == 'give_money',
+    );
+
+    if (canGiveCredit) {
       return true;
     } else {
       return false;

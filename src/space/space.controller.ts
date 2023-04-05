@@ -9,12 +9,14 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
+import { CreateCreditDto } from 'src/credit/dto/create-credit-dto';
 import { CreateDebtDto } from 'src/debt/dto/create-debt-dto';
 import { User } from 'src/decorators/user.decorator';
 import { CreateExpensesDto } from 'src/expenses/dto/create-expenses-dto';
 import { CreateIncomeDto } from 'src/income/dto/create-income-dto';
 import { CreateSpaceDto } from './dto/create-space-dto';
 import { AddUser } from './guards/addUser.guard';
+import { GiveCredit } from './guards/giveCredit.guard';
 import { MakePayment } from './guards/makePayment.guard';
 import { RecivePayment } from './guards/revicePayment.guard';
 import { TakeDebt } from './guards/TakeDebt.guard';
@@ -127,5 +129,26 @@ export class SpaceController {
   @Get(':id/total/debts')
   getTotalDebt(@Param('id', ParseIntPipe) id: number) {
     return this.spaceService.getTotalDebt(id);
+  }
+
+  @UseGuards(JwtAuthGuard, GiveCredit)
+  @Post(':id/add/credit')
+  addNewCredit(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() createCreditDto: CreateCreditDto,
+  ) {
+    return this.spaceService.addNewCredit(id, createCreditDto);
+  }
+
+  @UseGuards(JwtAuthGuard, WatchData)
+  @Get(':id/all/credits')
+  getAllCredit(@Param('id', ParseIntPipe) id: number) {
+    return this.spaceService.getAllCredit(id);
+  }
+
+  @UseGuards(JwtAuthGuard, WatchData)
+  @Get(':id/total/credits')
+  getTotalCredit(@Param('id', ParseIntPipe) id: number) {
+    return this.spaceService.getTotalCredit(id);
   }
 }

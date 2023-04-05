@@ -15,6 +15,7 @@ import { PermissionsModule } from './permissions/permissions.module';
 import { IncomeModule } from './income/income.module';
 import { ExpensesModule } from './expenses/expenses.module';
 import { DebtModule } from './debt/debt.module';
+import { CreditModule } from './credit/credit.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { DebtModule } from './debt/debt.module';
     IncomeModule,
     ExpensesModule,
     DebtModule,
+    CreditModule,
   ],
   controllers: [AppController],
   providers: [AppService],
