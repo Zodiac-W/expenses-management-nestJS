@@ -11,6 +11,7 @@ import { SpaceCredit } from './spaceCredit';
 import { SpaceDebt } from './spaceDebt';
 import { SpaceExpenses } from './spaceExpenses.entity';
 import { SpaceIncome } from './spaceIncome';
+import { SpaceWallet } from './spaceWallet.entity';
 
 @Entity()
 export class Space {
@@ -40,4 +41,7 @@ export class Space {
 
   @OneToMany((type) => SpaceCredit, (spaceCredit) => spaceCredit.space)
   spaceCredit: SpaceCredit[];
+
+  @OneToMany((type) => SpaceWallet, (spaceWallet) => spaceWallet.space)
+  spaceWallet: SpaceWallet[];
 }

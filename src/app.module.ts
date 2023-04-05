@@ -16,6 +16,7 @@ import { IncomeModule } from './income/income.module';
 import { ExpensesModule } from './expenses/expenses.module';
 import { DebtModule } from './debt/debt.module';
 import { CreditModule } from './credit/credit.module';
+import { WalletModule } from './wallet/wallet.module';
 
 @Module({
   imports: [
@@ -40,6 +41,7 @@ import { CreditModule } from './credit/credit.module';
     ExpensesModule,
     DebtModule,
     CreditModule,
+    WalletModule,
   ],
   controllers: [AppController],
   providers: [AppService],

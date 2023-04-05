@@ -123,10 +123,24 @@ export class RoleService {
     const permissions = await this.getRolePermissions(id);
 
     const canGiveCredit = permissions.some(
-      (permission) => permission.permission_name == 'give_money',
+      (permission) => permission.permission_name === 'give_money',
     );
 
     if (canGiveCredit) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  async canCreateWallet(id: number): Promise<any> {
+    const permissions = await this.getRolePermissions(id);
+
+    const canCreateWallet = permissions.some(
+      (permission) => permission.permission_name === 'create_wallet',
+    );
+
+    if (canCreateWallet) {
       return true;
     } else {
       return false;

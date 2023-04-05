@@ -14,8 +14,10 @@ import { CreateDebtDto } from 'src/debt/dto/create-debt-dto';
 import { User } from 'src/decorators/user.decorator';
 import { CreateExpensesDto } from 'src/expenses/dto/create-expenses-dto';
 import { CreateIncomeDto } from 'src/income/dto/create-income-dto';
+import { CreateWalletDto } from 'src/wallet/dto/create-wallet-dto';
 import { CreateSpaceDto } from './dto/create-space-dto';
 import { AddUser } from './guards/addUser.guard';
+import { CreateWallet } from './guards/CreateWallet.guard';
 import { GiveCredit } from './guards/giveCredit.guard';
 import { MakePayment } from './guards/makePayment.guard';
 import { RecivePayment } from './guards/revicePayment.guard';
@@ -150,5 +152,44 @@ export class SpaceController {
   @Get(':id/total/credits')
   getTotalCredit(@Param('id', ParseIntPipe) id: number) {
     return this.spaceService.getTotalCredit(id);
+  }
+
+  @UseGuards(JwtAuthGuard, CreateWallet)
+  @Post(':id/add/wallet')
+  addNewWallet(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() createWalletDto: CreateWalletDto,
+  ) {
+    return this.spaceService.addNewWallet(id, createWalletDto);
+  }
+
+  @UseGuards(JwtAuthGuard, WatchData)
+  @Get(':id/all/wallets')
+  getAllWallets(@Param('id', ParseIntPipe) id: number) {
+    return this.spaceService.getAllWallets(id);
+  }
+
+  @UseGuards(JwtAuthGuard, WatchData)
+  @Get(':id/total/wallets')
+  getTotalWallets(@Param('id', ParseIntPipe) id: number) {
+    return this.spaceService.getTotalWallets(id);
+  }
+
+  @UseGuards(JwtAuthGuard, WatchData)
+  @Get(':id/wallet/:wId')
+  getWallet(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('wId', ParseIntPipe) wId: number,
+  ) {
+    return this.spaceService.getWallet(id, wId);
+  }
+
+  @UseGuards(JwtAuthGuard, WatchData)
+  @Get(':id/balance/:wId')
+  getWalletBalance(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('wId', ParseIntPipe) wId: number,
+  ) {
+    return this.spaceService.getWalletBalance(id, wId);
   }
 }

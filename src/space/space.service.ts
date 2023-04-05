@@ -10,6 +10,8 @@ import { CreateIncomeDto } from 'src/income/dto/create-income-dto';
 import { IncomeService } from 'src/income/income.service';
 import { RoleService } from 'src/role/role.service';
 import { UsersService } from 'src/users/users.service';
+import { CreateWalletDto } from 'src/wallet/dto/create-wallet-dto';
+import { WalletService } from 'src/wallet/wallet.service';
 import { Repository } from 'typeorm';
 import { CreateSpaceDto } from './dto/create-space-dto';
 import { Space } from './entities/Space.entity';
@@ -19,6 +21,7 @@ import { SpaceExpenses } from './entities/spaceExpenses.entity';
 import { SpaceIncome } from './entities/spaceIncome';
 import { SpaceUser } from './entities/spaceUser.entity';
 import { SpaceUserRole } from './entities/spaceUserRole.entity';
+import { SpaceWallet } from './entities/spaceWallet.entity';
 
 @Injectable()
 export class SpaceService {
@@ -37,12 +40,15 @@ export class SpaceService {
     private spaceDebtRepository: Repository<SpaceDebt>,
     @InjectRepository(SpaceCredit)
     private spaceCreditRepository: Repository<SpaceCredit>,
+    @InjectRepository(SpaceWallet)
+    private spaceWalletRepository: Repository<SpaceWallet>,
     private userService: UsersService,
     private roleService: RoleService,
     private incomeService: IncomeService,
     private expensesService: ExpensesService,
     private debtService: DebtService,
     private creditService: CreditService,
+    private walletService: WalletService,
   ) {}
 
   async creaeteSpace(
@@ -286,5 +292,63 @@ export class SpaceService {
     const total = amount.reduce((acc, current) => acc + current);
 
     return total;
+  }
+
+  async addNewWallet(
+    spaceId: number,
+    createWalletDto: CreateWalletDto,
+  ): Promise<any> {
+    const wallet = await this.walletService.createWallet(createWalletDto);
+    const space = await this.getOneSpace(spaceId);
+
+    const spaceWallet = new SpaceWallet();
+    spaceWallet.space = space;
+    spaceWallet.wallet = wallet;
+
+    await this.spaceWalletRepository.save(spaceWallet);
+
+    return spaceWallet;
+  }
+
+  async getAllWallets(id: number): Promise<any> {
+    const space = await this.spaceRepository.findOne({
+      where: { id },
+      relations: ['spaceWallet', 'spaceWallet.wallet'],
+    });
+
+    const wallets = space.spaceWallet.map((spaceWallet) => spaceWallet.wallet);
+
+    return wallets;
+  }
+
+  async getTotalWallets(id: number): Promise<any> {
+    const wallets = await this.getAllWallets(id);
+
+    const balance = wallets.map((wallet) => wallet.wallet_balance);
+
+    const total = balance.reduce((acc, current) => acc + current);
+
+    return total;
+  }
+
+  async getWallet(spaceId: number, walletId: number): Promise<any> {
+    const space = await this.spaceRepository.findOne({
+      where: { id: spaceId },
+      relations: ['spaceWallet', 'spaceWallet.wallet'],
+    });
+
+    const wallets = space.spaceWallet.map((spaceWallet) => spaceWallet.wallet);
+
+    const wallet = wallets.find((wallet) => wallet.id === walletId);
+
+    return wallet;
+  }
+
+  async getWalletBalance(spaceId: number, walletId: number): Promise<any> {
+    const wallet = await this.getWallet(spaceId, walletId);
+
+    const balance = wallet.wallet_balance;
+
+    return { balance };
   }
 }
