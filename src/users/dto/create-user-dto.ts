@@ -9,17 +9,17 @@ import {
 export class CreateUserDto {
   @IsNotEmpty()
   @Length(4, 40)
-  name: string;
+  user_name: string;
 
   @IsNotEmpty()
   @IsEmail()
-  email: string;
+  user_email: string;
 
   @IsNotEmpty()
   @IsNumber()
-  phone: string;
+  user_phone: string;
 
   @IsNotEmpty()
   @IsStrongPassword()
-  password: string;
+  user_pass: string;
 }
