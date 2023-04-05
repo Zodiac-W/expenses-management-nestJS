@@ -31,7 +31,7 @@ export class IncomeService {
   }
 
   async deleteIncome(id: number): Promise<any> {
-    const income = this.getIncome(id);
+    const income = await this.getIncome(id);
 
     await this.incomeRepository.softDelete(id);
 

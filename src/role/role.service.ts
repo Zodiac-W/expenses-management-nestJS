@@ -103,4 +103,18 @@ export class RoleService {
       return false;
     }
   }
+
+  async canTakeDebt(id: number): Promise<any> {
+    const permissions = await this.getRolePermissions(id);
+
+    const canTakeDebt = permissions.some(
+      (permission) => permission.permission_name == 'take_money',
+    );
+
+    if (canTakeDebt) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

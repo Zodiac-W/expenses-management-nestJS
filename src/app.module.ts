@@ -14,6 +14,7 @@ import { SpaceModule } from './space/space.module';
 import { PermissionsModule } from './permissions/permissions.module';
 import { IncomeModule } from './income/income.module';
 import { ExpensesModule } from './expenses/expenses.module';
+import { DebtModule } from './debt/debt.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { ExpensesModule } from './expenses/expenses.module';
     PermissionsModule,
     IncomeModule,
     ExpensesModule,
+    DebtModule,
   ],
   controllers: [AppController],
   providers: [AppService],
