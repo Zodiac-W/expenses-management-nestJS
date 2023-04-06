@@ -1,6 +1,7 @@
 import { SpaceExpenses } from 'src/space/entities/spaceExpenses.entity';
 import {
   Column,
+  CreateDateColumn,
   DeleteDateColumn,
   Entity,
   OneToMany,
@@ -20,6 +21,9 @@ export class Expenses {
 
   @Column()
   expenses_description: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
 
   @DeleteDateColumn()
   deletedAt: Date;

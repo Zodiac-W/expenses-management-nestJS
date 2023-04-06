@@ -13,6 +13,12 @@ export class MakePayment implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const userId = request.user.userId;
     const spaceId = request.params.id;
+    const walletId = parseInt(request.params.wId, 10);
+    const wallet = await this.spaceService.getWallet(spaceId, walletId);
+
+    if (!wallet) {
+      return false;
+    }
 
     const role = await this.spaceService.getUserRole(userId, spaceId);
     const canMakePayment = await this.roleService.canMakePayment(role.id);

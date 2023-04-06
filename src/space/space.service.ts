@@ -151,15 +151,21 @@ export class SpaceService {
 
   async addNewIncome(
     spaceId: number,
+    walletId: number,
     creaeteIncomeDto: CreateIncomeDto,
   ): Promise<any> {
+    const { amount } = creaeteIncomeDto;
     const income = await this.incomeService.createIncome(creaeteIncomeDto);
     const space = await this.getOneSpace(spaceId);
 
     const spaceIncome = new SpaceIncome();
     spaceIncome.income = income;
     spaceIncome.space = space;
-
+    const walletBallance = await this.walletService.addToWallet(
+      walletId,
+      amount,
+    );
+    console.log(walletBallance);
     await this.spaceIncomeRepository.save(spaceIncome);
 
     return spaceIncome;
@@ -186,8 +192,10 @@ export class SpaceService {
 
   async addNewExpenses(
     spaceId: number,
+    walletId: number,
     createExpensesDto: CreateExpensesDto,
   ): Promise<any> {
+    const { amount } = createExpensesDto;
     const expenses = await this.expensesService.createExpenses(
       createExpensesDto,
     );
@@ -196,7 +204,11 @@ export class SpaceService {
     const spaceExpenses = new SpaceExpenses();
     spaceExpenses.expenses = expenses;
     spaceExpenses.space = space;
-
+    const walletBallance = await this.walletService.takeFromWallet(
+      walletId,
+      amount,
+    );
+    console.log(walletBallance);
     await this.spaceExpensesRepository.save(spaceExpenses);
     return spaceExpenses;
   }
@@ -336,7 +348,6 @@ export class SpaceService {
       where: { id: spaceId },
       relations: ['spaceWallet', 'spaceWallet.wallet'],
     });
-
     const wallets = space.spaceWallet.map((spaceWallet) => spaceWallet.wallet);
 
     const wallet = wallets.find((wallet) => wallet.id === walletId);

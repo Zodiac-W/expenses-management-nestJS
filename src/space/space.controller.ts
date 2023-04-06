@@ -71,12 +71,13 @@ export class SpaceController {
   }
 
   @UseGuards(JwtAuthGuard, RecivePayment)
-  @Post(':id/add/income')
+  @Post(':id/add/income/:wId')
   addNewIncome(
     @Body() createIncomeDto: CreateIncomeDto,
     @Param('id', ParseIntPipe) id: number,
+    @Param('wId', ParseIntPipe) wId: number,
   ) {
-    return this.spaceService.addNewIncome(id, createIncomeDto);
+    return this.spaceService.addNewIncome(id, wId, createIncomeDto);
   }
 
   @UseGuards(JwtAuthGuard, WatchData)
@@ -92,12 +93,13 @@ export class SpaceController {
   }
 
   @UseGuards(JwtAuthGuard, MakePayment)
-  @Post(':id/add/expenses')
+  @Post(':id/add/expenses/:wId')
   addNewExpenses(
-    @Param('id', ParseIntPipe) id: number,
     @Body() createExpensesDto: CreateExpensesDto,
+    @Param('id', ParseIntPipe) id: number,
+    @Param('wId', ParseIntPipe) wId: number,
   ) {
-    return this.spaceService.addNewExpenses(id, createExpensesDto);
+    return this.spaceService.addNewExpenses(id, wId, createExpensesDto);
   }
 
   @UseGuards(JwtAuthGuard, WatchData)
