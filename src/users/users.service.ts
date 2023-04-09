@@ -24,6 +24,7 @@ export class UsersService {
       user_expiration,
       user_total_transactions,
       user_spaces,
+      user_is_active,
     } = createUserDto;
 
     const salt = await bcrypt.genSalt(10);
@@ -38,6 +39,7 @@ export class UsersService {
     user.user_expiration = user_expiration;
     user.user_total_transactions = user_total_transactions;
     user.user_spaces = user_spaces;
+    user.user_is_active = user_is_active;
 
     if (
       (user_expiration === null ||
@@ -122,5 +124,21 @@ export class UsersService {
 
   async updateUserData(user: User): Promise<any> {
     await this.userRepository.save(user);
+  }
+
+  async activateUser(id: number): Promise<any> {
+    const user = await this.getOneUser(id);
+    user.user_is_active = true;
+
+    await this.updateUserData(user);
+    return user;
+  }
+
+  async disableUser(id: number): Promise<any> {
+    const user = await this.getOneUser(id);
+    user.user_is_active = false;
+
+    await this.updateUserData(user);
+    return user;
   }
 }

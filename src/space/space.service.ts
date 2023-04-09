@@ -93,8 +93,19 @@ export class SpaceService {
 
   async validateTransaction(id: number): Promise<any> {
     const user = await this.getSpaceOwner(id);
+    if (!user.user_is_active) {
+      throw new Error('please renew your subscrition');
+    }
 
     if (user.user_total_transactions > 0) {
+      const currentDate = new Date();
+      const expirationDate = new Date(user.user_expiration);
+      if (currentDate > expirationDate) {
+        user.user_is_active = false;
+        await this.userService.updateUserData(user);
+        throw new Error('please renew your subscrition');
+      }
+      console.log(currentDate, expirationDate);
       user.user_total_transactions--;
       await this.userService.updateUserData(user);
     } else {

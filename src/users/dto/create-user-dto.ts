@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsDate,
   IsEmail,
   IsEnum,
@@ -37,6 +38,10 @@ export class CreateUserDto {
   @IsOptional()
   @IsNumber()
   user_total_transactions;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  user_is_active: boolean;
 
   @IsOptional()
   @IsNumber()

@@ -40,4 +40,16 @@ export class UsersController {
   updateUser(@User() user: any, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.updateUser(user.userId, updateUserDto);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('activate/:id')
+  activateUser(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.activateUser(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Put('disable/:id')
+  disableUser(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.disableUser(id);
+  }
 }

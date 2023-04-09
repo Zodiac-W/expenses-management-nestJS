@@ -38,6 +38,9 @@ export class User {
   @Column({ type: 'integer', nullable: true })
   user_spaces: number;
 
+  @Column({ type: 'boolean', nullable: false, default: true })
+  user_is_active: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 
