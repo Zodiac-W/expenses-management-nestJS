@@ -20,7 +20,13 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Get('all')
   getAllUsers() {
-    return this.usersService.getAllUsers();
+    return this.usersService.getAllUser();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('all/names')
+  getAllUsersName() {
+    return this.usersService.getAllUsersName();
   }
 
   @UseGuards(JwtAuthGuard)

@@ -18,6 +18,8 @@ import { DebtModule } from './debt/debt.module';
 import { CreditModule } from './credit/credit.module';
 import { WalletModule } from './wallet/wallet.module';
 import { OverrideCreateDate } from './middleware/overrrideCreatedate.middleware';
+import { SubscriptionModule } from './subscription/subscription.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -33,6 +35,7 @@ import { OverrideCreateDate } from './middleware/overrrideCreatedate.middleware'
         return dataSource;
       },
     }),
+    ScheduleModule.forRoot(),
     UsersModule,
     AuthModule,
     RoleModule,
@@ -43,6 +46,7 @@ import { OverrideCreateDate } from './middleware/overrrideCreatedate.middleware'
     DebtModule,
     CreditModule,
     WalletModule,
+    SubscriptionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

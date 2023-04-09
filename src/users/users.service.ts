@@ -90,7 +90,13 @@ export class UsersService {
     return user;
   }
 
-  async getAllUsers(): Promise<any> {
+  async getAllUser(): Promise<any> {
+    const users = await this.userRepository.find();
+
+    return users;
+  }
+
+  async getAllUsersName(): Promise<any> {
     const users = await this.userRepository.find({ select: ['user_name'] });
 
     return users;
@@ -140,5 +146,27 @@ export class UsersService {
 
     await this.updateUserData(user);
     return user;
+  }
+
+  async getUserStatus(id: number): Promise<any> {
+    const user = await this.getOneUser(id);
+
+    const status = user.user_is_active;
+
+    if (status) {
+      return 'ACTIVE';
+    } else {
+      return 'DISABLED';
+    }
+  }
+
+  async updateUserStatus(id: number): Promise<any> {
+    const user = await this.getOneUser(id);
+
+    const currentDate = new Date();
+    const expirationDate = new Date(user.user_expiration);
+    if (currentDate > expirationDate) {
+      await this.disableUser(id);
+    }
   }
 }
