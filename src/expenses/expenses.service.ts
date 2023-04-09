@@ -13,14 +13,12 @@ export class ExpensesService {
 
   async createExpenses(createExpensesDto: CreateExpensesDto): Promise<any> {
     const { name, amount, description } = createExpensesDto;
-
     const expenses = new Expenses();
     expenses.expenses_name = name;
     expenses.expenses_amount = amount;
     expenses.expenses_description = description;
 
     await this.expensesRepository.save(expenses);
-
     return expenses;
   }
 

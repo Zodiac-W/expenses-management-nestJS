@@ -7,6 +7,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { UserRole } from '../enums/user-role.enum';
 
 @Entity()
 export class User {
@@ -24,6 +25,18 @@ export class User {
 
   @Column()
   user_pass: string;
+
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.REGULAR_USER })
+  user_role: UserRole;
+
+  @Column({ type: 'date', nullable: true })
+  user_expiration: Date;
+
+  @Column({ type: 'integer', nullable: true })
+  user_total_transactions: number;
+
+  @Column({ type: 'integer', nullable: true })
+  user_spaces: number;
 
   @CreateDateColumn()
   createdAt: Date;

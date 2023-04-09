@@ -54,6 +54,12 @@ export class SpaceController {
     return this.spaceService.getUserRole(user.userId, id);
   }
 
+  @UseGuards(JwtAuthGuard, WatchData)
+  @Get(':id/user/owner')
+  getSpaceOwner(@Param('id', ParseIntPipe) id: number) {
+    return this.spaceService.getSpaceOwner(id);
+  }
+
   @UseGuards(JwtAuthGuard, AddUser)
   @Post(':id/user')
   addNewUser(

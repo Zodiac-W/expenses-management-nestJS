@@ -15,7 +15,16 @@ export class UsersService {
   ) {}
 
   async signupUser(createUserDto: CreateUserDto): Promise<any> {
-    const { user_name, user_email, user_phone, user_pass } = createUserDto;
+    const {
+      user_name,
+      user_email,
+      user_phone,
+      user_pass,
+      user_role,
+      user_expiration,
+      user_total_transactions,
+      user_spaces,
+    } = createUserDto;
 
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(user_pass, salt);
@@ -25,6 +34,19 @@ export class UsersService {
     user.user_email = user_email;
     user.user_phone = user_phone;
     user.user_pass = hash;
+    user.user_role = user_role;
+    user.user_expiration = user_expiration;
+    user.user_total_transactions = user_total_transactions;
+    user.user_spaces = user_spaces;
+
+    if (
+      (user_expiration === null ||
+        user_total_transactions === null ||
+        user_spaces === null) &&
+      user_role !== 'superuser'
+    ) {
+      throw new Error('ERROR ADDING NULL TO REGULA USERS');
+    }
 
     await this.userRepository.save(user);
 
@@ -96,5 +118,9 @@ export class UsersService {
     } else {
       return user;
     }
+  }
+
+  async updateUserData(user: User): Promise<any> {
+    await this.userRepository.save(user);
   }
 }

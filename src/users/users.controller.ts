@@ -24,6 +24,12 @@ export class UsersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  getUser(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.getOneUser(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   deleteUser(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.deleteUser(id);

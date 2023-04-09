@@ -55,14 +55,23 @@ export class SpaceService {
     createSpaceDto: CreateSpaceDto,
     userId: number,
   ): Promise<any> {
+    const user = await this.userService.getOneUser(userId);
+
+    if (user.user_spaces > 0) {
+      user.user_spaces--;
+      await this.userService.updateUserData(user);
+    } else {
+      throw new Error(
+        'You cant create new space please renew your subscrition',
+      );
+    }
+
     const { name } = createSpaceDto;
 
     const space = new Space();
     space.space_name = name;
 
     await this.spaceRepository.save(space);
-
-    const user = await this.userService.getOneUser(userId);
 
     const spaceUser = new SpaceUser();
     spaceUser.space = space;
@@ -80,6 +89,19 @@ export class SpaceService {
     await this.spaceUserRoleRepository.save(spaceUserRole);
 
     return spaceUserRole;
+  }
+
+  async validateTransaction(id: number): Promise<any> {
+    const user = await this.getSpaceOwner(id);
+
+    if (user.user_total_transactions > 0) {
+      user.user_total_transactions--;
+      await this.userService.updateUserData(user);
+    } else {
+      throw new Error(
+        'You cant create new transaction please renew your subscrition',
+      );
+    }
   }
 
   async getOneSpace(id: number): Promise<Space> {
@@ -149,11 +171,24 @@ export class SpaceService {
     return users;
   }
 
+  async getSpaceOwner(id: number): Promise<any> {
+    const users = await this.getAllUsers(id);
+
+    const owner = users.find(async (user) => {
+      const userRole = await this.getUserRole(user.id, id);
+      return userRole.role_name === 'OWNER';
+    });
+
+    return owner;
+  }
+
   async addNewIncome(
     spaceId: number,
     walletId: number,
     creaeteIncomeDto: CreateIncomeDto,
   ): Promise<any> {
+    await this.validateTransaction(spaceId);
+
     const { amount } = creaeteIncomeDto;
     const income = await this.incomeService.createIncome(creaeteIncomeDto);
     const space = await this.getOneSpace(spaceId);
@@ -195,10 +230,13 @@ export class SpaceService {
     walletId: number,
     createExpensesDto: CreateExpensesDto,
   ): Promise<any> {
+    await this.validateTransaction(spaceId);
+
     const { amount } = createExpensesDto;
     const expenses = await this.expensesService.createExpenses(
       createExpensesDto,
     );
+
     const space = await this.getOneSpace(spaceId);
 
     const spaceExpenses = new SpaceExpenses();
@@ -239,6 +277,8 @@ export class SpaceService {
     spaceId: number,
     createDebtDto: CreateDebtDto,
   ): Promise<any> {
+    await this.validateTransaction(spaceId);
+
     const debt = await this.debtService.createDebt(createDebtDto);
     const space = await this.getOneSpace(spaceId);
 
@@ -274,6 +314,8 @@ export class SpaceService {
     spaceId: number,
     createCreditDto: CreateCreditDto,
   ): Promise<any> {
+    await this.validateTransaction(spaceId);
+
     const credit = await this.creditService.createCredit(createCreditDto);
     const space = await this.getOneSpace(spaceId);
 

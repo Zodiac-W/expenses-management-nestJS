@@ -1,10 +1,14 @@
 import {
+  IsDate,
   IsEmail,
+  IsEnum,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsStrongPassword,
   Length,
 } from 'class-validator';
+import { UserRole } from '../enums/user-role.enum';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -22,4 +26,19 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsStrongPassword()
   user_pass: string;
+
+  @IsEnum(UserRole)
+  user_role: UserRole;
+
+  @IsOptional()
+  @IsDate()
+  user_expiration: Date;
+
+  @IsOptional()
+  @IsNumber()
+  user_total_transactions;
+
+  @IsOptional()
+  @IsNumber()
+  user_spaces: number;
 }

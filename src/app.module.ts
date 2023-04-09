@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { InjectDataSource, TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
@@ -17,6 +17,7 @@ import { ExpensesModule } from './expenses/expenses.module';
 import { DebtModule } from './debt/debt.module';
 import { CreditModule } from './credit/credit.module';
 import { WalletModule } from './wallet/wallet.module';
+import { OverrideCreateDate } from './middleware/overrrideCreatedate.middleware';
 
 @Module({
   imports: [
@@ -53,4 +54,11 @@ export class AppModule {
   ) {
     console.log(dataSource);
   }
+
+  // configure(consumer: MiddlewareConsumer) {
+  //   consumer.apply(OverrideCreateDate).forRoutes({
+  //     path: '*',
+  //     method: RequestMethod.ALL,
+  //   });
+  // }
 }
