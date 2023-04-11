@@ -6,6 +6,7 @@ import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDto } from './dto/login-user-dto';
 import { UpdateUserDto } from './dto/update-user-dto';
+import { Tenant } from 'src/tenant/entities/tenant.entity';
 
 @Injectable()
 export class UsersService {
@@ -167,6 +168,33 @@ export class UsersService {
     const expirationDate = new Date(user.user_expiration);
     if (currentDate > expirationDate) {
       await this.disableUser(id);
+    }
+  }
+
+  async assignUserToTenant(userId: number, tenant: Tenant): Promise<any> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['tenant'],
+    });
+    const currentTenant = user.tenant;
+
+    if (currentTenant && currentTenant !== tenant) {
+      throw new Error('User is already associated with a different tenant');
+    }
+
+    user.tenant = tenant;
+
+    await this.updateUserData(user);
+    return user;
+  }
+
+  async checkSuperuser(id: number): Promise<any> {
+    const user = await this.getOneUser(id);
+
+    if (user.user_role === 'superuser') {
+      return true;
+    } else {
+      return false;
     }
   }
 }

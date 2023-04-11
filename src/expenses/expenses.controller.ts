@@ -5,9 +5,11 @@ import {
   ParseIntPipe,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 import { ExpensesService } from './expenses.service';
 
+@ApiTags('Expenses')
 @Controller('expenses')
 export class ExpensesController {
   constructor(private expensesService: ExpensesService) {}

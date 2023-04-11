@@ -1,9 +1,11 @@
 import { SpaceUser } from 'src/space/entities/spaceUser.entity';
+import { Tenant } from 'src/tenant/entities/tenant.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -49,4 +51,7 @@ export class User {
 
   @OneToMany((type) => SpaceUser, (spaceUser) => spaceUser.user)
   spaceUser: SpaceUser[];
+
+  @ManyToOne((type) => Tenant, (tenant) => tenant.user)
+  tenant: Tenant;
 }

@@ -16,6 +16,7 @@ import { Credit } from 'src/credit/entities/credit.entity';
 import { SpaceCredit } from 'src/space/entities/spaceCredit';
 import { Wallet } from 'src/wallet/entities/wallet.entity';
 import { SpaceWallet } from 'src/space/entities/spaceWallet.entity';
+import { Tenant } from 'src/tenant/entities/tenant.entity';
 
 export const AppDataSource = new DataSource({
   type: process.env.DATABASE_TYPE,
@@ -43,6 +44,7 @@ export const AppDataSource = new DataSource({
     SpaceCredit,
     Wallet,
     SpaceWallet,
+    Tenant,
   ],
   migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
   cli: {

@@ -20,6 +20,7 @@ import { WalletModule } from './wallet/wallet.module';
 import { OverrideCreateDate } from './middleware/overrrideCreatedate.middleware';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { TenantModule } from './tenant/tenant.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     CreditModule,
     WalletModule,
     SubscriptionModule,
+    TenantModule,
   ],
   controllers: [AppController],
   providers: [AppService],

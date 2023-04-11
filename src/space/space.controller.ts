@@ -8,6 +8,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 import { CreateCreditDto } from 'src/credit/dto/create-credit-dto';
 import { CreateDebtDto } from 'src/debt/dto/create-debt-dto';
@@ -26,6 +27,7 @@ import { WatchData } from './guards/watchData.guard';
 
 import { SpaceService } from './space.service';
 
+@ApiTags('space')
 @Controller('space')
 export class SpaceController {
   constructor(private spaceService: SpaceService) {}

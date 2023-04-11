@@ -7,10 +7,10 @@ import { User } from './decorators/user.decorator';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @UseGuards(JwtAuthGuard)
-  @Get()
-  getUser(@User() user: any) {
-    console.log(user);
-    return user.userId;
-  }
+  // @UseGuards(JwtAuthGuard)
+  // @Get()
+  // getUser(@User() user: any) {
+  //   console.log(user);
+  //   return user.userId;
+  // }
 }
